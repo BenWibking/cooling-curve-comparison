@@ -1,0 +1,53 @@
+# Based on https://turnermoni.ca/python3.html
+
+    # Set the backend, otherwise the figure won't show up. Note that this will 
+    # depend on your system setup; to see which backend is the default,
+    # run "matplotlib.get_backend()" in the Python interpreter.
+    backend                 :  GTK3Agg    
+
+    # Increase the default DPI, and change the file type from png to pdf 
+    savefig.dpi             :   300
+    savefig.format          :   pdf
+
+    # Instead of individually increasing font sizes, point sizes, and line 
+    # thicknesses, I found it easier to just decrease the figure size so
+    # that the line weights of various components still agree 
+    figure.figsize          :   4,4
+
+    # Turn on minor ticks, top and right axis ticks, and change the direction to "in" 
+    xtick.top               :   True
+    ytick.right             :   True
+    xtick.minor.visible     :   True
+    ytick.minor.visible     :   True
+    ytick.direction         :   in
+    xtick.direction         :   in
+            
+    # Increase the major and minor tick-mark lengths 
+    xtick.major.size        :   6  # default 3.5
+    ytick.major.size        :   6  # default 3.5
+    xtick.minor.size        :   3  # default 2 
+    ytick.minor.size        :   3  # default 2 
+
+    # Increase the padding between the ticklabels and the axes, to prevent 
+    # overlap in the lower lefthand corner
+    xtick.major.pad         :   4  # default 3.5
+    ytick.major.pad         :   4  # default 3.5 
+    xtick.minor.pad         :   4  # default 3.5 
+    ytick.minor.pad         :   4  # default 3.5 
+ 
+    # Turn off the legend frame and reduce the space between the point and the label  
+    legend.frameon          :   False
+    legend.handletextpad    :   0.0
+
+    # Computer Modern Bright has a much lower font weight, so the tick mark and 
+    # line widths should be adjusted accordingly. 
+    xtick.major.width       :   0.6  # default 0.8
+    ytick.major.width       :   0.6  # default 0.8
+    axes.linewidth          :   0.6  # default 0.8 
+    lines.linewidth         :   0.6  # default 1.5 
+    lines.markeredgewidth   :   0.6  # default 1
+
+    # The magic sauce
+    text.usetex             :  True     
+    text.latex.preamble     :  \usepackage[T1]{fontenc} \usepackage{cmbright}
+    axes.unicode_minus      :  False
