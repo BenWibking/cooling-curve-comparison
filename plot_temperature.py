@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib.cm import colors
 
 if __name__ == '__main__':
-    dens, temp, P, tcool, HI_frac, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=2)
-    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, HI_frac_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=2)
+    dens, temp, P, tcool, Ne, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
+    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
 
     pdata = load_hydro_data("../outputs_mhd/snapshot_1000.hdf5")
     ptemp = compute_temperature(pdata)

@@ -30,8 +30,8 @@ def find_unstable_phase(dens, temp, P):
     return temp_unm_bracket, dens_unm_bracket, pres_unm_bracket
 
 if __name__ == '__main__':
-    dens, temp, P, tcool, HI_frac, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=2)
-    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, HI_frac_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=2)
+    dens, temp, P, tcool, Ne, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
+    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
 
     temp_unm_bracket, dens_unm_bracket, pres_unm_bracket = find_unstable_phase(dens, temp, P)
 
@@ -56,9 +56,9 @@ if __name__ == '__main__':
     plt.hist2d(np.log10(pdensity_nHcgs), np.log10(ppressure_cgs/kboltz), weights=pdata['Masses'],
                 bins=100, density=True, norm=colors.LogNorm(), range=[(lognHmin,lognHmax), (logPmin,logPmax)])
     plt.plot(np.log10(dens), np.log10(P/kboltz), linewidth=2, color='black', label="thermal equilibrium")
-    plt.hlines(y=np.log10(pres_unm_bracket), xmin=np.log10(np.min(dens_unm_bracket)),
-                xmax=np.log10(np.max(dens_unm_bracket)),
-                linestyles='dashed', color='red', linewidth=1)
+    #plt.hlines(y=np.log10(pres_unm_bracket), xmin=np.log10(np.min(dens_unm_bracket)),
+    #            xmax=np.log10(np.max(dens_unm_bracket)),
+    #            linestyles='dashed', color='red', linewidth=1)
     plt.xlabel(r"$\log_{10}$ density ($m_H$ cm$^{-3}$)")
     plt.ylabel(r"$\log_{10}$ pressure (K cm$^{-3}$)")
     plt.xlim(-7, 5)

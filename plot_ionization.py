@@ -6,12 +6,12 @@ from matplotlib.cm import colors
 kboltz = 1.3806504e-16
 
 if __name__ == '__main__':
-    dens, temp, P, tcool, HI_frac, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=2)
-    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, HI_frac_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=2)
+    dens, temp, P, tcool, Ne, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
+    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
 
     ion_threshold = [0.4, 0.5, 0.9]
     for threshold in ion_threshold:
-        ion_temp = np.interp(1.0 - threshold, HI_frac, temp)
+        ion_temp = np.interp(threshold, Ne, temp)
         print(f"ionization temperature: {ion_temp}")
 
     grackle_label = r"Grackle" # (UVB: Haardt \& Madau 2012)
@@ -19,8 +19,8 @@ if __name__ == '__main__':
     thickness = 2
 
     plt.figure(figsize=(4,4))
-    plt.plot(dens, 1.0 - HI_frac, linewidth=thickness, color='black', label=grackle_label)
-    plt.plot(dens_FIRE, 1.0 - HI_frac_FIRE, linewidth=thickness, color='red', label=FIRE_label)
+    plt.plot(dens, Ne, linewidth=thickness, color='black', label=grackle_label)
+    plt.plot(dens_FIRE, Ne_FIRE, linewidth=thickness, color='red', label=FIRE_label)
     ne_obs = 0.047 # cm^-3
     nH_obs = 0.5 # n(H_tot) = 0.5 cm^-3 assumed in Jenkins (2013)
     e_per_H_obs = ne_obs / nH_obs
@@ -36,8 +36,8 @@ if __name__ == '__main__':
     plt.savefig("ionization_curve.pdf")
 
     plt.figure(figsize=(4,4))
-    plt.plot(1.0 - HI_frac, temp, linewidth=thickness, color='black', label=grackle_label)
-    plt.plot(1.0 - HI_frac_FIRE, temp_FIRE, linewidth=thickness, color='red', label=FIRE_label)
+    plt.plot(Ne, temp, linewidth=thickness, color='black', label=grackle_label)
+    plt.plot(Ne_FIRE, temp_FIRE, linewidth=thickness, color='red', label=FIRE_label)
     plt.xlabel("equilibrium ionisation fraction (dimensionless)")
     plt.ylabel("temperature (K)")
     plt.yscale('log')

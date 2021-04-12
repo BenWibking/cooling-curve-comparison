@@ -1,9 +1,9 @@
+#include "allvars.h"
+#include "cooling.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "allvars.h"
-#include "cooling.h"
 
 #ifdef COOL_GRACKLE
 #include <grackle.h>
@@ -79,12 +79,18 @@ int main(int argc, char *argv[]) {
     rho_bins[i] = pow(10., logrho);
   }
 
+#ifdef COOL_GRACKLE
+  fprintf(stdout, "### GRACKLE THERMAL EQUILIBRIUM\n");
+#else
+  fprintf(stdout, "### FIRE-2 THERMAL EQUILIBRIUM\n");
+#endif // COOL_GRACKLE
+
   fprintf(stdout, "# [H cm^-3] [K] [ergs cm^-3] [s] [dimensionless]\n");
-  fprintf(stdout, "rho temperature pressure cooling_time HI_fraction\n");
+  fprintf(stdout, "rho temperature pressure cooling_time ne_per_H\n");
 
 #ifdef COOL_GRACKLE
   // set photoionizing background
-  strcpy(All.GrackleDataFile, "../grackle/input/CloudyData_UVB=HM2012.h5");
+  strcpy(All.GrackleDataFile, "./grackle/input/CloudyData_UVB=HM2012.h5");
   // initialize Grackle
   InitGrackle();
 #else
@@ -128,19 +134,21 @@ int main(int argc, char *argv[]) {
     grackle_species.Density = rho;
     grackle_species.Ne = ne_guess;
     grackle_species.Metallicity[0] = 0.02; // assume solar
-    // copied from init.c:
+
+    // copied from GIZMO init.c:
+
     /* initialize abundance ratios. for now, assume [scaled] solar */
     for (int j = 0; j < NUM_METAL_SPECIES; j++) {
       grackle_species.Metallicity[j] =
           All.SolarAbundances[j] *
           (grackle_species.Metallicity[0] / All.SolarAbundances[0]);
     }
+
     /* need to allow for a primordial He abundance */
-    if (NUM_LIVE_SPECIES_FOR_COOLTABLES >= 10)
-      grackle_species.Metallicity[1] =
-          (1. - HYDROGEN_MASSFRAC) +
-          (All.SolarAbundances[1] - (1. - HYDROGEN_MASSFRAC)) *
-              grackle_species.Metallicity[0] / All.SolarAbundances[0];
+    grackle_species.Metallicity[1] =
+        (1. - HYDROGEN_MASSFRAC) +
+        (All.SolarAbundances[1] - (1. - HYDROGEN_MASSFRAC)) *
+            grackle_species.Metallicity[0] / All.SolarAbundances[0];
 #endif
 
     // iterate until temperature converges
@@ -157,6 +165,7 @@ int main(int argc, char *argv[]) {
     double T_prev = T0;
     double HI_prev = HYDROGEN_MASSFRAC;
     double HI_converged = NAN;
+    double Ne_converged = NAN; // electron number per hydrogen
     double T_converged = NAN;
     double P_converged = NAN;
     double tcool_converged = NAN;
@@ -166,6 +175,8 @@ int main(int argc, char *argv[]) {
       // 0 == compute equilibrium ionization state
       eint = CallGrackle(eint, rho, dt, ne_guess, &grackle_species, 0);
       const double HI_fraction = grackle_species.grHI / HYDROGEN_MASSFRAC;
+      const double ne_per_H = grackle_species.Ne;
+
       if (verbose) {
         fprintf(stderr, "Ionization state:\n");
         fprintf(stderr, "\tHI = %g\n", grackle_species.grHI);
@@ -194,7 +205,8 @@ int main(int argc, char *argv[]) {
       // compute cooling
       eint = DoCooling(eint, rho, dt, ne_guess, &grackle_species);
       if (verbose) {
-        double nHcgs = HYDROGEN_MASSFRAC * rho;
+        double nHcgs =
+            HYDROGEN_MASSFRAC * rho; // rho is already in units of PROTONMASS
         double photoheating_per_H = nHcgs * grackle_species.PhotoheatingRate;
         fprintf(stderr, "Photoheating rate (per H) = %g ergs/s\n",
                 photoheating_per_H);
@@ -211,10 +223,12 @@ int main(int argc, char *argv[]) {
       const double rho_cgs = rho * UNIT_DENSITY_IN_CGS;
       const double eint_cgs = eint * UNIT_SPECEGY_IN_CGS;
       double nH0_guess, nHp_guess, nHe0_guess, nHep_guess, nHepp_guess, mu;
+
       const double temperature = convert_u_to_temp(
           eint_cgs, rho_cgs, &grackle_species, &ne_guess, &nH0_guess,
           &nHp_guess, &nHe0_guess, &nHep_guess, &nHepp_guess, &mu);
       const double HI_fraction = nH0_guess;
+      const double ne_per_H = grackle_species.Ne;
 
       // compute cooling time
       const double cooling_time =
@@ -255,12 +269,13 @@ int main(int argc, char *argv[]) {
       HI_converged = HI_fraction;
       T_converged = temperature;
       P_converged = pressure_cgs;
+      Ne_converged = ne_per_H;
       tcool_converged = cooling_time;
     }
 
     // output data
     fprintf(stdout, "%.10e %.10e %.10e %.10e %.10e %d\n", rho, T_converged,
-            P_converged, tcool_converged * time_units, HI_converged,
+            P_converged, tcool_converged * time_units, Ne_converged,
             is_converged);
   }
 

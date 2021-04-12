@@ -10,7 +10,7 @@
 
 extern struct species_data
 {
-    double Ne;
+    double Ne; // electron number per hydrogen nucleon
     double DtInternalEnergy;
     double Density;
     double Metallicity[NUM_METAL_SPECIES]; /*!< metallicity (species-by-species) of gas or star particle */

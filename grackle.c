@@ -1,3 +1,4 @@
+#ifdef COOL_GRACKLE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,6 +103,10 @@ double CallGrackle(double u_old, double rho, double dt, double ne_guess, struct 
             }
             
             // Assign variables back
+            double nHcgs = HYDROGEN_MASSFRAC * (rho * UNIT_DENSITY_IN_CGS) / PROTONMASS;
+            const double ne_cgs = (ne_density * UNIT_DENSITY_IN_CGS) / PROTONMASS; // [cm^-3] (see https://github.com/grackle-project/grackle/issues/69)
+            data->Ne      = ne_cgs / nHcgs; // electron number per hydrogen nucleon
+
             data->grHI    = HI_density    / density;
             data->grHII   = HII_density   / density;
             data->grHM    = HM_density    / density;
@@ -298,3 +303,4 @@ void InitGrackle(void)
     }
     
 }
+#endif // COOL_GRACKLE
