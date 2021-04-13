@@ -1,7 +1,0 @@
-#define OUTPUT_COOLRATE_DETAIL 
-#define COOLING 
-#define COOL_GRACKLE 
-#define COOL_GRACKLE_CHEMISTRY 1
-#define METALS 
-#define GALSF 
-#define GALSF_SFR_CRITERION (0+1+2+64)

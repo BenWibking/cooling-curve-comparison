@@ -1,0 +1,4 @@
+GIZMO_config.h
+*.o
+compile_time_info.c
+__pycache__
