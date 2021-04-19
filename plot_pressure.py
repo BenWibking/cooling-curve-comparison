@@ -34,38 +34,10 @@ if __name__ == '__main__':
     dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
 
     temp_unm_bracket, dens_unm_bracket, pres_unm_bracket = find_unstable_phase(dens, temp, P)
-
     find_unstable_phase(dens_FIRE, temp_FIRE, P_FIRE)
-
-    pdata = load_hydro_data("../outputs_mhd/snapshot_1000.hdf5")
-    ptemp = compute_temperature(pdata)
-    pmesh = compute_mesh(pdata)
-    pdensity_code = pmesh.Density()
-    pdensity_cgs = pdensity_code * unitdensity_cgs
-    pdensity_nHcgs = pdensity_cgs / m_H
-    ppressure_cgs = compute_pressure(pdata, pdensity_code)
 
     grackle_label = r"Grackle (constant $\Gamma_{pe}$)" # (UVB: Haardt \& Madau 2012)
     FIRE_label = r"FIRE-2 (with $G_0 = 1.7$)" #(UVB: Faucher-Giguere et al. 2009)
-
-    plt.figure(figsize=(4,4))
-    logPmin = -2
-    logPmax = 7
-    lognHmin = -7
-    lognHmax = 5
-    plt.hist2d(np.log10(pdensity_nHcgs), np.log10(ppressure_cgs/kboltz), weights=pdata['Masses'],
-                bins=100, density=True, norm=colors.LogNorm(), range=[(lognHmin,lognHmax), (logPmin,logPmax)])
-    plt.plot(np.log10(dens), np.log10(P/kboltz), linewidth=2, color='black', label="thermal equilibrium")
-    #plt.hlines(y=np.log10(pres_unm_bracket), xmin=np.log10(np.min(dens_unm_bracket)),
-    #            xmax=np.log10(np.max(dens_unm_bracket)),
-    #            linestyles='dashed', color='red', linewidth=1)
-    plt.xlabel(r"$\log_{10}$ density ($m_H$ cm$^{-3}$)")
-    plt.ylabel(r"$\log_{10}$ pressure (K cm$^{-3}$)")
-    plt.xlim(-7, 5)
-    plt.ylim(logPmin, logPmax)
-    plt.legend(loc='lower right')
-    plt.tight_layout()
-    plt.savefig("pressure_curve.pdf")
 
     plt.figure(figsize=(4,4))
     plt.plot((dens), (P/kboltz), linewidth=2, color='black', label=grackle_label)
