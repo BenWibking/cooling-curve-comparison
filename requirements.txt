@@ -1,0 +1,4 @@
+h5py==3.1.0
+matplotlib==3.3.4
+numpy==1.20.1
+Meshoid==1.1
