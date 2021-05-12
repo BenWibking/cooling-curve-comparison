@@ -6,8 +6,8 @@ from matplotlib.cm import colors
 kboltz = 1.3806504e-16
 
 if __name__ == '__main__':
-    dens, temp, P, tcool, Ne, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
-    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
+    dens, temp, P, tcool, Ne, HI, HII, HeI, HeII, HeIII, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
+    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, HI_FIRE, HII_FIRE, HeI_FIRE, HeII_FIRE, HeIII_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
 
     ion_threshold = [0.4, 0.5, 0.9]
     for threshold in ion_threshold:

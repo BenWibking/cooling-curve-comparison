@@ -115,7 +115,7 @@ export OMPI_FC = clang
 CC       = mpicc
 CXX      = mpicxx
 FC       = mpif90
-LDFLAGS	 = -L/usr/local/Cellar/gcc/10.2.0_4/lib/gcc/10 -lgfortran
+LDFLAGS	 = -L/usr/local/Cellar/gcc/11.1.0/lib/gcc/11 -lgfortran
 # WARNING: do *NOT* run with -ffast-math !!
 OPTIMIZE += -O2 -march=native -ffp-contract=off -fstandalone-debug #-fsanitize=address # clang options
 ifeq (OPENMP,$(findstring OPENMP,$(CONFIGVARS)))
@@ -124,8 +124,8 @@ endif
 GRACKLE_HOME = $(HOME)/grackle_install
 GRACKLEINCL = -I$(GRACKLE_HOME)/include
 GRACKLELIBS = -L$(GRACKLE_HOME)/lib -Wl,-rpath,$(GRACKLE_HOME)/lib
-HDF5INCL = -I/usr/local/Cellar/hdf5/1.12.0_1/include -DH5_USE_16_API
-HDF5LIB  = -L/usr/local/Cellar/hdf5/1.12.0_1/lib -lhdf5 -lz
+HDF5INCL = -I/usr/local/Cellar/hdf5/1.12.0_4/include -DH5_USE_16_API
+HDF5LIB  = -L/usr/local/Cellar/hdf5/1.12.0_4/lib -lhdf5 -lz
 GSLINCL  = -I/usr/local/Cellar/gsl/2.6/include
 GSLLIB   = -L/usr/local/Cellar/gsl/2.6/lib -lgsl -lgslcblas
 MPICHLIB = 

@@ -30,8 +30,8 @@ def find_unstable_phase(dens, temp, P):
     return temp_unm_bracket, dens_unm_bracket, pres_unm_bracket
 
 if __name__ == '__main__':
-    dens, temp, P, tcool, Ne, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
-    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
+    dens, temp, P, tcool, Ne, HI, HII, HeI, HeII, HeIII, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
+    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, HI_FIRE, HII_FIRE, HeI_FIRE, HeII_FIRE, HeIII_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
 
     temp_unm_bracket, dens_unm_bracket, pres_unm_bracket = find_unstable_phase(dens, temp, P)
     find_unstable_phase(dens_FIRE, temp_FIRE, P_FIRE)
@@ -45,6 +45,7 @@ if __name__ == '__main__':
     plt.xlabel(r"gas density ($m_H$ cm$^{-3}$)")
     plt.ylabel(r"pressure (K cm$^{-3}$)")
     plt.xlim(1e-7, 1e5)
+    plt.ylim(1e0, 1e4) # to show differences
     plt.xscale('log')
     plt.yscale('log')
     plt.legend(loc='lower right')

@@ -6,8 +6,7 @@ from matplotlib.cm import colors
 kboltz = 1.3806504e-16
 
 if __name__ == '__main__':
-    dens, temp, P, tcool, Ne, converged = np.loadtxt(
-        "grackle_curve.txt", unpack=True, skiprows=3)
+    dens, temp, P, tcool, Ne, HI, HII, HeI, HeII, HeIII, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
 
     pdata = load_hydro_data("../outputs_mhd/snapshot_1000.hdf5")
     ptemp = compute_temperature(pdata)

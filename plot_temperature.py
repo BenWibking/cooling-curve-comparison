@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib.cm import colors
 
 if __name__ == '__main__':
-    dens, temp, P, tcool, Ne, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
-    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
+    dens, temp, P, tcool, Ne, HI, HII, HeI, HeII, HeIII, converged = np.loadtxt("grackle_curve.txt", unpack=True, skiprows=3)
+    dens_FIRE, temp_FIRE, P_FIRE, tcool_FIRE, Ne_FIRE, HI_FIRE, HII_FIRE, HeI_FIRE, HeII_FIRE, HeIII_FIRE, converged_FIRE = np.loadtxt("gizmo_spcool_FG2009_curve.txt", unpack=True, skiprows=3)
 
     grackle_label = r"Grackle (constant $\Gamma_{pe}$)" # (UVB: Haardt \& Madau 2012)
     FIRE_label = r"FIRE-2 (with $G_0 = 1.7$)" #(UVB: Faucher-Giguere et al. 2009)
