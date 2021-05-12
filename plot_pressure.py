@@ -45,7 +45,7 @@ if __name__ == '__main__':
     plt.xlabel(r"gas density ($m_H$ cm$^{-3}$)")
     plt.ylabel(r"pressure (K cm$^{-3}$)")
     plt.xlim(1e-7, 1e5)
-    plt.ylim(1e0, 1e4) # to show differences
+    #plt.ylim(1e0, 1e4) # zoom-in to show differences
     plt.xscale('log')
     plt.yscale('log')
     plt.legend(loc='lower right')
